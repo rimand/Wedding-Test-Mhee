@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale = 1.0, user-scalable = no">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/8.10.1/firebase-app.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/8.10.1/firebase-storage.min.js"></script>
+
+    <link rel="stylesheet" href="./style.css">
+    <title>Document</title>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyCoZ7uwSfayFFx3RJVIcsj6o0PBWeyei4c",
+            authDomain: "wedding-test-mhee.firebaseapp.com",
+            projectId: "wedding-test-mhee",
+            storageBucket: "wedding-test-mhee.appspot.com",
+            messagingSenderId: "984344339103",
+            appId: "1:984344339103:web:6727170ceea833993838aa",
+            measurementId: "G-CXFENWBZM1"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        // const storage = firebase.getStorage();
+        var storageRef = firebase.storage().ref();
+
+        img = document.getElementById("img1");
+
+        function sendMessage() {
+            downloadCanvas(this);
+            // autoDownloadCanvas();
+        }
+
+        async function downloadCanvas(el) {
+            var canvas = document.getElementById("canvas");
+            const imageURI = canvas.toDataURL("image/png");
+            // el.href = imageURI;
+
+            var imageRef = storageRef.child(`${new Date().getTime()}.png`);
+            imageRef.putString(imageURI, 'data_url').then(function (snapshot) {
+                console.log('Uploaded a data_url string!');
+            });
+        };
+
+        async function autoDownloadCanvas() {
+            let link = document.getElementById('link');
+            link.setAttribute('download', `${new Date().getTime()}.png`);
+            link.setAttribute('href', canvas.toDataURL("image/png"));
+            link.click();
+        }
+    </script>
+
+</head>
+
+<body>
+    <section class="contrainer">
+        <a id="link"></a>
+        <div id="toolbar">
+            <!-- <h1>Draw</h1> -->
+            <label for="stroke">Stroke</label>
+            <input id="stroke" name="stroke" type="color" value="#ffffff">
+            <label for="lineWidth">Line Width</label>
+            <input id="lineWidth" name="lineWidth" type="number" value="10">
+            <button id="clear">Clear</button>
+            <!-- <p id="text">TextTest</p> -->
+        </div>
+        <div class="drawing-board">
+            <canvas id="canvas"></canvas>
+        </div>
+        <div id="send">
+            <img id="img1" src="send.png" onclick="sendMessage()">
+        </div>
+    </section>
+
+
+    <script src="canvas.js"></script>
+</body>
+
+</html>
